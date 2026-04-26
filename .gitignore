@@ -1,0 +1,13 @@
+# Python
+__pycache__/
+*.pyc
+
+# Kiro session files
+*.json
+
+# macOS
+.DS_Store
+
+# Editor
+*.swp
+*.swo
