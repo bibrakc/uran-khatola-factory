@@ -12,11 +12,13 @@
 - [ ] Add `<meta name="description">` to each page for SEO
 - [ ] Add a `sitemap.xml`
 
-## Deployment Workflow (to design)
+## Deployment
 
-- [ ] Decide on host: GitHub Pages vs Netlify vs S3
-- [ ] Set up `rsync --checksum` or CI deploy so only changed files upload
-- [ ] Document the full publish workflow: write post → run rebuild-site.py → deploy
+- [x] Hosted on GitHub Pages: https://bibrakc.github.io/uran-khatola-factory/
+- [x] Repo: https://github.com/bibrakc/uran-khatola-factory
+- [x] SSH key auth configured for push
+- [ ] Set up custom domain (optional)
+- [ ] Document full publish workflow: write post → run rebuild-site.py → git add/commit/push
 
 ## Content Backlog
 
@@ -29,6 +31,7 @@
 
 ## Design / UX Backlog
 
+- [ ] Replace CSS "NEW!" badge with a real animated new.gif (90s style). Download manually from gifcities.org or similar, save as `img/common/new.gif`, then update `rebuild-site.py` to use `<img src="...new.gif">` instead of the `<span class="badge-new">` tag.
 - [ ] Review and possibly tweak color scheme (currently: white bg, dark green nav, red accent)
 - [ ] Add print stylesheet so posts print cleanly
 - [ ] Consider a small airplane ASCII art or SVG in the header for extra vintage feel

@@ -108,7 +108,15 @@ curl -sO "https://...full-url-no-query-params..."
 Fonts: **Courier New** (nav, meta, headers) + **Georgia** (body).  
 Responsive: two-column grid, sidebar stacks below at ≤680px.
 
-## Deployment (TODO)
+## Deployment
 
-Not yet set up. Plan: GitHub Pages or Netlify.  
-Use `rsync --checksum` to only upload changed files.
+Hosted on **GitHub Pages**: https://bibrakc.github.io/uran-khatola-factory/  
+Repo: https://github.com/bibrakc/uran-khatola-factory
+
+To publish changes:
+```bash
+python3 scripts/rebuild-site.py
+git add .
+git commit -m "description"
+git push
+```

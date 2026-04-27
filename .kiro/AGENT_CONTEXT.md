@@ -7,8 +7,22 @@ This file gives an AI agent everything it needs to work on this project without 
 A static personal website for Bibrak Qamar Chandio, who is building a **Van's RV-8 homebuilt aircraft** in his garage in Cupertino, California. The site chronicles the build with blog-style posts, a build hours tracker, and links to social media.
 
 - **WordPress source:** https://urankhatolafactory.wordpress.com/
+- **Live site:** https://bibrakc.github.io/uran-khatola-factory/
+- **Repo:** https://github.com/bibrakc/uran-khatola-factory
 - **Owner/author:** Bibrak Qamar Chandio (`bibrakc@gmail.com`)
 - **Social:** YouTube, Facebook, Instagram (all `urankhatolafactory`)
+
+## Deployment
+
+Hosted on **GitHub Pages** from the `main` branch, root folder.  
+To publish changes:
+```bash
+python3 scripts/rebuild-site.py   # regenerate derived content
+git add .
+git commit -m "description"
+git push
+```
+GitHub Pages auto-deploys on push. Usually live within 1-2 minutes.
 
 ## Tech Stack
 

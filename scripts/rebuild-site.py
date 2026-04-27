@@ -281,6 +281,8 @@ def build_table_html(totals, buckets):
 
 def update_index(table_html):
     content = open(INDEX_HTML).read()
+    # Remove any existing NEW badges first
+    content = re.sub(r'\s*<span class="badge-new">NEW!</span>', '', content)
     # Replace Build Hours section + any immediately following Beyond the Build section
     new_content = re.sub(
         r'(<h3>Build Hours</h3>\s*)<table class="hours-table">.*?</table>'
@@ -316,3 +318,22 @@ if __name__ == "__main__":
     update_index_categories(posts, anchor_map)
     update_recent_posts(posts)
     update_post_nav(posts)
+
+    # Add NEW! badge to the most recent post in index.html and log.html
+    if posts:
+        newest_path = posts[0]["path"]
+        for html_path in [INDEX_HTML, LOG_HTML]:
+            c = open(html_path).read()
+            c = re.sub(r'\s*<span class="badge-new">NEW!</span>', '', c)
+            c = c.replace(
+                f'href="{newest_path}"',
+                f'href="{newest_path}"', 1
+            )
+            # Insert badge after the first link to the newest post
+            c = c.replace(
+                f'href="{newest_path}">',
+                f'href="{newest_path}"><span class="badge-new">NEW!</span> ',
+                1
+            )
+            open(html_path, "w").write(c)
+        print(f"NEW! badge added to: {posts[0]['title']}")

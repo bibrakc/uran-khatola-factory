@@ -134,7 +134,7 @@ a:hover { color: var(--link-hover); text-decoration: underline; }
 
 hr {
   border: none;
-  border-top: 1px solid var(--border);
+  border-top: 2px solid var(--accent);
   margin: 24px 0;
 }
 
@@ -312,6 +312,21 @@ footer a { color: #c0b090; }
   font-family: "Courier New", Courier, monospace;
   font-size: 0.8rem;
   margin: 16px 0;
+}
+
+/* ── NEW badge ── */
+.badge-new {
+  display: inline-block;
+  background: var(--accent);
+  color: #fff;
+  font-family: "Courier New", Courier, monospace;
+  font-size: 0.65rem;
+  font-weight: bold;
+  letter-spacing: 1px;
+  padding: 1px 5px;
+  margin-left: 6px;
+  vertical-align: middle;
+  text-transform: uppercase;
 }
 
 /* ── TAGS ── */
