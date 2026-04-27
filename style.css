@@ -141,7 +141,6 @@ hr {
 /* ── PAGE TITLE BAR ── */
 .page-title {
   background: var(--bg-alt);
-  border-top: 3px solid var(--accent);
   border-bottom: 1px solid var(--border);
   padding: 14px 16px;
   margin-bottom: 0;

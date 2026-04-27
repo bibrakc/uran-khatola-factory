@@ -22,6 +22,7 @@
 
 ## Content Backlog
 
+- [ ] Add "Build Stats" sidebar section to index.html homepage. Manually maintained. Suggested stats: kit sections ordered/received, parts reordered, rivets driven, workshops attended, tools acquired, manuals read. Honest and fun — shows the real side of building. Style like the hours table (Courier New, monospace).
 - [ ] Write and add new RV-8 build posts as work progresses
 - [ ] Add a "Lessons Learned" page (inspired by papalimabravo.com)
 - [ ] Add a "Tools & Equipment" page
