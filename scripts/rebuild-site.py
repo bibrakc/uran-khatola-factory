@@ -162,6 +162,30 @@ def update_post_nav(posts):
     print(f"Post nav updated for {len(posts)} posts.")
 
 
+
+
+def update_index_recent_posts(posts):
+    """Rewrite the top-5 recent posts list on index.html."""
+    top5 = posts[:5]
+    items = ""
+    for i, p in enumerate(top5):
+        badge = '<img src="img/common/new.gif" alt="NEW!" style="vertical-align:middle; height:1.2em; margin-right:4px;"> ' if i == 0 else ""
+        items += "      <li>\n"
+        items += f'        <span class="post-date">{_fmt_date(p["date"])}</span>\n'
+        items += f'        <a href="{p["path"]}">{badge}{p["title"]}</a>\n'
+        items += f'        <span class="post-cat">{p["category"]}</span>\n'
+        items += "      </li>\n"
+    new_block = '<h2>Recent Build Log Entries</h2>\n    <ul class="post-list">\n' + items + "    </ul>"
+    c = open(INDEX_HTML).read()
+    import re as _re
+    new = _re.sub(r'<h2>Recent Build Log Entries</h2>\s*<ul class="post-list">.*?</ul>',
+                 new_block, c, flags=_re.DOTALL)
+    if new != c:
+        open(INDEX_HTML, "w").write(new)
+        print("index.html recent posts updated.")
+    else:
+        print("index.html recent posts: no changes needed.")
+
 def update_index_categories(posts, anchor_map):
     content = open(INDEX_HTML).read()
     items = "".join(
@@ -315,25 +339,24 @@ if __name__ == "__main__":
     print(f"\nPosts found: {len(posts)}")
     _, anchor_map = build_category_section(posts)
     update_log(posts, anchor_map)
+    update_index_recent_posts(posts)
     update_index_categories(posts, anchor_map)
     update_recent_posts(posts)
     update_post_nav(posts)
 
-    # Add NEW! badge to the most recent post in index.html and log.html
+    # Add NEW! badge (GIF) to the most recent post in index.html and log.html
     if posts:
         newest_path = posts[0]["path"]
-        for html_path in [INDEX_HTML, LOG_HTML]:
+        badges = {
+            INDEX_HTML: '<img src="img/common/new.gif" alt="NEW!" style="vertical-align:middle; height:1.2em; margin-right:4px;"> ',
+            LOG_HTML:   '<img src="img/common/new.gif" alt="NEW!" style="vertical-align:middle; height:1.2em; margin-right:4px;"> ',
+        }
+        for html_path, badge in badges.items():
             c = open(html_path).read()
-            c = re.sub(r'\s*<span class="badge-new">NEW!</span>', '', c)
-            c = c.replace(
-                f'href="{newest_path}"',
-                f'href="{newest_path}"', 1
-            )
-            # Insert badge after the first link to the newest post
-            c = c.replace(
-                f'href="{newest_path}">',
-                f'href="{newest_path}"><span class="badge-new">NEW!</span> ',
-                1
-            )
+            # Remove any existing badges
+            c = re.sub(r'<span class="badge-new">NEW!</span>\s*', '', c)
+            c = re.sub(r'<img src="[^"]*new\.gif"[^>]*>\s*', '', c)
+            # Add badge to first link to newest post
+            c = c.replace(f'href="{newest_path}">', f'href="{newest_path}">{badge}', 1)
             open(html_path, "w").write(c)
         print(f"NEW! badge added to: {posts[0]['title']}")
