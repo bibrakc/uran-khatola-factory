@@ -11,3 +11,6 @@ __pycache__/
 # Editor
 *.swp
 *.swo
+
+# Private workshop notes, plans, drawings — not for public repo
+workshop/empennage/drawings/

@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="build-hours" content="3" data-category="research-education">
+  <meta name="build-category" content="Research &amp; Education">
+  <meta name="build-date" content="2026-05-04">
+  <meta name="description" content="Using an AI assistant as a builder assist for the RV-8 project. How I set it up, what it does, and what it cannot do.">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Building with an AI Co-Builder | Uran Khatola Factory</title>
+  <link rel="icon" href="../../img/common/favicon-32.png" sizes="32x32">
+  <link rel="apple-touch-icon" href="../../img/common/favicon-180.png">
+  <link rel="stylesheet" href="../../style.css">
+</head>
+<body>
+
+<header id="site-header">
+  <img src="../../img/common/cropped-uuran-khatola-factory-01-copy.jpg" alt="Uran Khatola Factory" class="banner-img">
+  <h1>Uran Khatola Factory</h1>
+  <div class="tagline">Building a Van's RV-8 in the Garage</div>
+</header>
+
+<nav>
+  <ul>
+    <li><a href="../../index.html">Home</a></li>
+    <li><a href="../../log.html" class="active">Build Log</a></li>
+    <li><a href="../../aircraft.html">Aircraft</a></li>
+    <li><a href="../../about.html">About</a></li>
+    <li><a href="https://www.youtube.com/channel/UCkw7kZ2sxUoKswTp_emBPEg" target="_blank">YouTube</a></li>
+    <li><a href="https://www.facebook.com/urankhatolafactory" target="_blank">Facebook</a></li>
+  </ul>
+</nav>
+
+<div id="wrapper">
+  <main id="main">
+
+    <div class="post-header">
+      <h1>Building with an AI Co-Builder</h1>
+      <div class="post-meta">
+        <span>&#128197; May 4, 2026</span>
+        <span>&#128193; Research &amp; Education</span>
+        <span>&#9201; 3 hrs logged</span>
+      </div>
+    </div>
+
+    <div class="post-body">
+
+      <p>I have been thinking about this for a while. Building an airplane is a long project with thousands of hours, hundreds of parts, and a manual that constantly refers you to drawings that refer you back to the manual. The information is all there, but it is spread across the Van's plans, the drawing sheets, and dozens of builder websites that other people have maintained over the years. Keeping all of that in your head while you are standing at the workbench with a drill in your hand is not easy.</p>
+
+      <p>I made mistakes on my first RV-7 empennage. I made mistakes again on the early RV-8 horizontal stabilizer. Some of those mistakes were avoidable if I had simply known what to look for before I started drilling. So I decided to try something different this time: I set up an AI assistant as a dedicated builder assist.</p>
+
+      <h2>The Problem It Solves</h2>
+
+      <p>The Van's plans are well written but dense. The drawings are detailed but small. And the collective wisdom of the builder community is scattered across sites like <a href="http://papalimabravo.com/" target="_blank">papalimabravo.com</a>, <a href="https://rv.squawk1200.net" target="_blank">rv.squawk1200.net</a>, and the <a href="https://www.vansairforce.net" target="_blank">Van's Air Force forums</a>. None of those are organized around the specific step you are about to do.</p>
+
+      <p>What I wanted was something that had read all of it, could answer questions about a specific part number, and would warn me about the mistake that the builder on page 3 of that forum thread made in 2012 before I made the same one. That is what the AI does.</p>
+
+      <h2>Setting It Up</h2>
+
+      <p>The first step was pointing the AI at the plans. My Van's drawing PDFs live on a separate drive at <code>/mnt/d/RV8/Construction Drawings/</code>. I asked the AI to read the directory and tell me what it found. It identified the manual sections, the individual drawing sheets (DWG 01 through 85), and the optional parts drawings.</p>
+
+      <img src="../../img/2026/building-with-an-ai-co-builder/ai-reading-plans-directory-and-task-setup.png" alt="AI reading the plans directory and discussing the task">
+      <p class="img-caption">The AI reads the plans directory and identifies the manual sections and drawing sheets. Then we discuss the task: create build files for each empennage sub-assembly, read the builder sites, and think one step ahead.</p>
+
+      <p>The drawing sheets are scanned images, not text, so the AI cannot read them directly as PDFs. I am working on Linux, so the fix was one command using <code>pdftoppm</code> (part of the <code>poppler-utils</code> package) that converts each drawing to a PNG file the AI can see. On Mac you can install it via Homebrew (<code>brew install poppler</code>). On Windows, the Poppler Windows binaries are available online.</p>
+
+<pre style="background:var(--bg-alt); border:1px solid var(--border); padding:12px; font-size:0.82rem; overflow-x:auto; margin:16px 0;">
+# Convert a drawing PDF to an image
+pdftoppm -r 120 -png "/mnt/d/RV8/Construction Drawings/03_8.pdf" /tmp/dwg3
+# Creates /tmp/dwg3-1.png
+</pre>
+
+      <p>I asked the AI to do this for all five empennage drawings (DWG 3 through 7). It ran the commands, read each image, and extracted the information. It could see part numbers, rivet callouts, dimensions, section views, and the exploded isometric views. It then extracted that information directly into the build files.</p>
+
+      <img src="../../img/2026/building-with-an-ai-co-builder/ai-reading-drawings-and-updating-build-file.png" alt="AI converting drawing PDFs to images and updating the horizontal stabilizer build file">
+      <p class="img-caption">The AI converts all five empennage drawings to images, reads them, and immediately updates the horizontal stabilizer build file with the actual rivet callouts from the drawing. You can see it adding AN470AD4-5, AN470AD4-4, and AN426AD4-5 flush rivet specifications pulled directly from DWG 3.</p>
+
+      <h2>What It Produced</h2>
+
+      <p>After reading the manual, the drawings, and six builder websites, the AI created a <code>workshop/</code> folder with a build file for each sub-assembly. This folder is open source and available in the <a href="https://github.com/bibrakc/uran-khatola-factory/tree/main/workshop" target="_blank">project repository</a> so other builders can read it, use it as a template, or contribute. The drawing PNG files are excluded since those are converted from Van's Aircraft copyrighted plans, but all the build notes, warnings, and sequences are there.</p>
+
+<pre style="background:var(--bg-alt); border:1px solid var(--border); padding:12px; font-size:0.82rem; overflow-x:auto; margin:16px 0;">
+workshop/
+  AGENT.md                   &lt;-- instructions for the AI
+  empennage/
+    README.md                &lt;-- overview and build order
+    horizontal-stabilizer.md &lt;-- step-by-step, warnings, status
+    vertical-stabilizer.md
+    rudder.md
+    elevators.md
+    drawings/
+      DWG3-horizontal-stabilizer.png
+      DWG4-left-elevator.png
+      DWG5-right-elevator.png
+      DWG6-vertical-stabilizer.png
+      DWG7-rudder.png
+</pre>
+
+      <p>Each file has the build sequence from the manual, the actual rivet callouts from the drawing, and a warnings section with every mistake I or another builder has made in that area. Here is what the rudder warnings section looks like:</p>
+
+      <img src="../../img/2026/building-with-an-ai-co-builder/rudder-warnings-in-vscode-preview.png" alt="Rudder build file showing Known Gotchas and Warnings section in VS Code">
+      <p class="img-caption">The rudder.md file open in VS Code. The warnings section covers the thin R-801PP skin, the R-606PP plate orientation (a common mistake), back riveting technique, trailing edge bend, lead counterweight drilling, and strobe light clearance at the bottom tip. All of this came from the manual and from other builders' sites.</p>
+
+      <h2>The AGENT.md File</h2>
+
+      <p>The key to making this work across sessions is a file called <code>AGENT.md</code>. This is a plain text file that tells the AI who it is working with, what the project is, where the plans are, and how to think. Without it, every new conversation starts from scratch. With it, the AI picks up exactly where we left off.</p>
+
+      <p>The file covers things like: the builder's background and constraints (non-toxic primer, residential garage), where the PDF plans live on disk, which builder sites to reference, and a set of principles such as "think one step ahead" and "non-Alclad parts must be primed before riveting."</p>
+
+      <p>You do not need to write this file yourself from scratch. You can describe your project to the AI and ask it to generate one based on your conversation. Mine grew organically over a single long session and now serves as the starting point for every build discussion.</p>
+
+      <p>There is one more piece that makes this practical across multiple sessions: context saving. In AI terms, <em>context</em> is everything the AI currently knows about your conversation, your files, and your project. It is what allows the AI to give relevant answers rather than generic ones. But context is not automatically saved between sessions. If you close the terminal and come back the next day, the AI starts fresh.</p>
+
+      <p>In Kiro, you can save the current context with the <code>/chat save</code> command and reload it later with <code>/chat load</code>. Combined with the <code>AGENT.md</code> file, this means the AI can pick up exactly where you left off: same build status, same warnings, same understanding of your specific kit and constraints. For a multi-year project like building an airplane, that continuity matters.</p>
+
+      <h2>The Tool: Kiro</h2>
+
+      <p>I am using <strong><a href="https://kiro.dev/cli/" target="_blank">Kiro</a></strong>, an AI coding and task assistant that runs in the terminal. It can read files, browse the web, run shell commands, and look at images. That combination is what makes it useful here: it can open a PDF, convert it to an image, read the image, cross-reference a builder site, and write the result into a markdown file, all in one conversation.</p>
+
+      <p>You do not have to use Kiro specifically. Any AI assistant that can read files and images and maintain context across a session would work. The approach is what matters, not the specific tool.</p>
+
+      <h2>What It Cannot Do</h2>
+
+      <p>It cannot hold a rivet gun. It cannot feel whether a part is properly seated. It can misread a drawing since the text on engineering blueprints is small and sometimes ambiguous. Everything it tells me I verify against the actual plans before I act on it.</p>
+
+      <p>It is a co-pilot, not an autopilot. The judgment calls are still mine. But having something that has read the entire manual, all the drawings, and six builder sites before I pick up a drill has already saved me from at least one mistake I know about, and probably others I do not.</p>
+
+      <h2>For Other Builders</h2>
+
+      <p>If you are building an RV or any other kit aircraft and want to try this, the basic setup is:</p>
+
+      <ol style="margin-left:1.5em; margin-bottom:14px; line-height:2;">
+        <li>Get an AI assistant that can read files and images (Kiro, Claude, GPT-4o, etc.).</li>
+        <li>Create a <code>workshop/</code> folder somewhere on your computer for your build notes, checklists, and anything the AI produces.</li>
+        <li>Write an <code>AGENT.md</code> that describes your project, your plans location, your constraints, and how you want the AI to think. Or ask the AI to write it for you based on a conversation.</li>
+        <li>Convert your drawing PDFs to images: <code>pdftoppm -r 120 -png drawing.pdf /tmp/dwg</code></li>
+        <li>Ask the AI to read the manual, read the drawings, and create a build file for each sub-assembly.</li>
+        <li>Update the status checklists as you build. Ask the AI to warn you before each new step.</li>
+      </ol>
+
+      <p>The builder community has always been generous with knowledge. This is just a new way to aggregate and apply it.</p>
+
+    </div>
+
+    <div class="tags">
+      Tags:
+      <a href="#">AI</a>
+      <a href="#">tools</a>
+      <a href="#">planning</a>
+      <a href="#">rv8</a>
+      <a href="#">EAA</a>
+    </div>
+
+    <div class="post-nav" id="post-nav">
+      <a href="experimented-with-stewart-systems-primer.html">&larr; May 2, 2026<br><span style="font-size:0.9em;">In Pursuit of a Primer</span></a>
+      
+    </div>
+
+  </main>
+
+  <aside id="sidebar">
+    <div class="sidebar-section" id="recent-posts">
+      <h3>Around This Time</h3>
+      <ul>
+        <li><a href="building-with-an-ai-co-builder.html">Building with an AI Co-Builder</a> &laquo;</li>
+        <li><a href="experimented-with-stewart-systems-primer.html">In Pursuit of a Primer</a></li>
+        <li><a href="attended-fiberglass-workshop.html">Attended Fiberglass Workshop</a></li>
+      </ul>
+    </div>
+  </aside>
+</div>
+
+<footer>
+  <p><img src="../../img/common/airplane.gif" alt="" style="display:inline; height:1.4em; vertical-align:middle; margin-right:6px;">Uran Khatola Factory &mdash; Building a Van's RV-8 &mdash; Cupertino, California</p>
+  <p style="margin-top:6px;">
+    <a href="https://www.youtube.com/channel/UCkw7kZ2sxUoKswTp_emBPEg" target="_blank">YouTube</a> &nbsp;|&nbsp;
+    <a href="https://www.facebook.com/urankhatolafactory" target="_blank">Facebook</a> &nbsp;|&nbsp;
+    <a href="https://www.instagram.com/urankhatolafactory/" target="_blank">Instagram</a>
+  </p>
+  <p style="margin-top:8px; color:#a0c0a0;">All content &copy; Bibrak Qamar Chandio. Build responsibly.</p>
+  <p style="margin-top:10px;"><a href="https://info.flagcounter.com/CcML"><img src="https://s01.flagcounter.com/count2/CcML/bg_F0F5F1/txt_1A1A1A/border_B0A898/columns_2/maxflags_20/viewers_0/labels_1/pageviews_1/flags_0/percent_0/" alt="Flag Counter" border="0" style="width:1px; height:1px; opacity:0;"></a></p>
+</footer>
+
+</body>
+</html>
