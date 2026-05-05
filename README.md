@@ -1,41 +1,52 @@
-# Uran Khatola Factory — Website
+# Uran Khatola Factory
 
 Static website chronicling the build of a Van's RV-8 homebuilt aircraft.
 
-**Live WordPress (source of truth for content):** https://urankhatolafactory.wordpress.com/  
+**Live site:** https://bibrakc.github.io/uran-khatola-factory/  
 **Owner:** Bibrak Qamar Chandio (bibrakc@gmail.com)
 
 ## Stack
 
-Pure HTML + CSS. No framework, no build step, no JavaScript.  
-Host anywhere: GitHub Pages, Netlify, S3 static hosting, etc.
+Pure HTML + CSS. No framework, no build step, no JavaScript.
 
 ## Structure
 
 ```
-website/
-  style.css              # single stylesheet
-  index.html             # home page
-  log.html               # build log (by year + by category)
-  about.html             # about the builder and project
-  rebuild-site.py        # regenerates derived content — run after every new post
+/                          # repo root = site root
+  style.css                # single stylesheet
+  index.html               # home page
+  log.html                 # build log (by year + by category)
+  about.html               # about the builder and project
+  aircraft.html            # RV-8 aircraft page
+  404.html                 # custom not found page
+  scripts/
+    rebuild-site.py        # regenerates derived content (run after every new post)
   posts/
-    2021/                # one .html file per post, grouped by year
+    2021/                  # one .html file per post, grouped by year
     2022/
     2026/
   img/
-    common/              # site-wide assets (banner, homepage photos, profile)
-    2021/                # per-post images, grouped by year/post-slug/
+    common/                # site-wide assets (banner, homepage photos, profile)
+    2021/                  # per-post images, grouped by year/post-slug/
     2022/
     2026/
+  workshop/                # build planning notes (open source, drawings excluded)
+    AGENT.md               # AI builder assist instructions
+    empennage/
+      README.md
+      horizontal-stabilizer.md
+      vertical-stabilizer.md
+      rudder.md
+      elevators.md
+      drawings/            # drawing PNGs, excluded from git (Van's copyright)
 ```
 
 ## Running Locally
 
 ```bash
-cd website
 python3 -m http.server 8080
 # open http://localhost:8080
+# on phone (same WiFi): http://YOUR_LOCAL_IP:8080
 ```
 
 ## Adding a New Post
@@ -51,15 +62,18 @@ python3 -m http.server 8080
    <!-- add data-bucket="other" if hours should NOT count toward build total -->
    ```
 5. Download post images into `img/YEAR/post-slug/` (see Media section below).
-6. Add `<img>` tags in the post body.
-7. Run `python3 scripts/rebuild-site.py` from the `website/` directory.
+6. Add `<img>` tags in the post body wrapped in `<a class="img-link">` for tap-to-zoom.
+7. Add the post entry to the By Year section of `log.html` manually.
+8. Run `python3 scripts/rebuild-site.py` from the repo root.
 
-That's it. The script handles:
+The script handles:
 - Build hours table on `index.html`
+- Recent posts list on `index.html`
 - By Category section and sidebar on `log.html`
 - Categories sidebar on `index.html`
 - "Around This Time" sidebar on every post
 - Prev/next navigation on every post
+- NEW! badge on the most recent post
 
 ## Hours Categories
 
@@ -76,6 +90,17 @@ That's it. The script handles:
 
 New categories auto-appear in the table. Add `data-bucket="other"` to exclude from build total.
 
+## Clickable Images
+
+All post images are wrapped in `<a class="img-link">` so tapping opens the full-size image in a new tab. Use this pattern:
+
+```html
+<a href="../../img/YEAR/post-slug/photo.jpg" target="_blank" class="img-link">
+  <img src="../../img/YEAR/post-slug/photo.jpg" alt="description">
+</a>
+<p class="img-caption">Caption text.</p>
+```
+
 ## Media Workflow (importing from WordPress)
 
 ```bash
@@ -85,10 +110,8 @@ curl -s "https://urankhatolafactory.wordpress.com/YEAR/MM/DD/post-slug/" \
   | sort -u
 
 # 2. Download into the post's image folder
-cd website/img/YEAR/post-slug/
+cd img/YEAR/post-slug/
 curl -sO "https://...full-url-no-query-params..."
-
-# 3. Replace placeholder divs in the post HTML with real <img> tags
 ```
 
 ## Design System
@@ -100,20 +123,22 @@ curl -sO "https://...full-url-no-query-params..."
 | `--border`     | `#b0a898`  | Borders and dividers         |
 | `--text`       | `#1a1a1a`  | Body text                    |
 | `--text-muted` | `#5a5a5a`  | Dates, captions, meta        |
-| `--accent`     | `#8b1a1a`  | Deep red — highlights        |
+| `--accent`     | `#8B6914`  | Dark gold, highlights       |
 | `--link`       | `#1a4a2e`  | Link color                   |
 | `--nav-bg`     | `#1a4a2e`  | Nav, footer, sidebar headers |
 | `--max-width`  | `860px`    | Content max width            |
 
 Fonts: **Courier New** (nav, meta, headers) + **Georgia** (body).  
-Responsive: two-column grid, sidebar stacks below at ≤680px.
+Responsive: two-column grid, sidebar stacks below at ≤680px. Images tap-to-zoom on mobile.
+
+## Workshop (AI Builder Assist)
+
+The `workshop/` folder contains build planning notes generated with AI assistance. See the blog post: [Building with an AI Co-Builder](https://bibrakc.github.io/uran-khatola-factory/posts/2026/building-with-an-ai-co-builder.html).
+
+The drawing PNG files (`workshop/empennage/drawings/`) are excluded from git as they are derived from Van's Aircraft copyrighted plans.
 
 ## Deployment
 
-Hosted on **GitHub Pages**: https://bibrakc.github.io/uran-khatola-factory/  
-Repo: https://github.com/bibrakc/uran-khatola-factory
-
-To publish changes:
 ```bash
 python3 scripts/rebuild-site.py
 git add .
