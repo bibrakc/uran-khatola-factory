@@ -24,6 +24,7 @@ body {
   font-family: Georgia, "Times New Roman", serif;
   font-size: 17px;
   line-height: 1.7;
+  overflow-x: hidden;
 }
 
 /* ── HEADER ── */
@@ -101,10 +102,11 @@ nav ul li a.active {
   grid-template-columns: 1fr 220px;
   gap: 0 28px;
   align-items: start;
+  min-width: 0;
 }
 
-#main  { padding: 28px 0; }
-#sidebar { padding: 28px 0; border-left: 1px solid var(--border); padding-left: 20px; }
+#main  { padding: 28px 0; min-width: 0; }
+#sidebar { padding: 28px 0; border-left: 1px solid var(--border); padding-left: 20px; min-width: 0; }
 
 /* ── TYPOGRAPHY ── */
 h1, h2, h3 {
@@ -369,3 +371,8 @@ footer a { color: #c0b090; }
   body { font-size: 15px; }
   #site-header h1 { font-size: 1.2rem; letter-spacing: 1px; }
 }
+
+/* Clickable images — open full size in new tab */
+a.img-link { display: block; }
+a.img-link img { cursor: zoom-in; }
+a.img-link:hover img { opacity: 0.9; }

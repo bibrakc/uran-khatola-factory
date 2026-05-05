@@ -59,12 +59,12 @@
 
       <p>The first step was pointing the AI at the plans. My Van's drawing PDFs live on a separate drive at <code>/mnt/d/RV8/Construction Drawings/</code>. I asked the AI to read the directory and tell me what it found. It identified the manual sections, the individual drawing sheets (DWG 01 through 85), and the optional parts drawings.</p>
 
-      <img src="../../img/2026/building-with-an-ai-co-builder/ai-reading-plans-directory-and-task-setup.png" alt="AI reading the plans directory and discussing the task">
+      <a href="../../img/2026/building-with-an-ai-co-builder/ai-reading-plans-directory-and-task-setup.png" target="_blank" class="img-link"><img src="../../img/2026/building-with-an-ai-co-builder/ai-reading-plans-directory-and-task-setup.png" alt="AI reading the plans directory and discussing the task"></a>
       <p class="img-caption">The AI reads the plans directory and identifies the manual sections and drawing sheets. Then we discuss the task: create build files for each empennage sub-assembly, read the builder sites, and think one step ahead.</p>
 
       <p>The drawing sheets are scanned images, not text, so the AI cannot read them directly as PDFs. I am working on Linux, so the fix was one command using <code>pdftoppm</code> (part of the <code>poppler-utils</code> package) that converts each drawing to a PNG file the AI can see. On Mac you can install it via Homebrew (<code>brew install poppler</code>). On Windows, the Poppler Windows binaries are available online.</p>
 
-<pre style="background:var(--bg-alt); border:1px solid var(--border); padding:12px; font-size:0.82rem; overflow-x:auto; margin:16px 0;">
+<pre style="background:var(--bg-alt); border:1px solid var(--border); padding:12px; font-size:0.82rem; overflow-x:auto; margin:16px 0; max-width:100%;">
 # Convert a drawing PDF to an image
 pdftoppm -r 120 -png "/mnt/d/RV8/Construction Drawings/03_8.pdf" /tmp/dwg3
 # Creates /tmp/dwg3-1.png
@@ -72,14 +72,14 @@ pdftoppm -r 120 -png "/mnt/d/RV8/Construction Drawings/03_8.pdf" /tmp/dwg3
 
       <p>I asked the AI to do this for all five empennage drawings (DWG 3 through 7). It ran the commands, read each image, and extracted the information. It could see part numbers, rivet callouts, dimensions, section views, and the exploded isometric views. It then extracted that information directly into the build files.</p>
 
-      <img src="../../img/2026/building-with-an-ai-co-builder/ai-reading-drawings-and-updating-build-file.png" alt="AI converting drawing PDFs to images and updating the horizontal stabilizer build file">
+      <a href="../../img/2026/building-with-an-ai-co-builder/ai-reading-drawings-and-updating-build-file.png" target="_blank" class="img-link"><img src="../../img/2026/building-with-an-ai-co-builder/ai-reading-drawings-and-updating-build-file.png" alt="AI converting drawing PDFs to images and updating the horizontal stabilizer build file"></a>
       <p class="img-caption">The AI converts all five empennage drawings to images, reads them, and immediately updates the horizontal stabilizer build file with the actual rivet callouts from the drawing. You can see it adding AN470AD4-5, AN470AD4-4, and AN426AD4-5 flush rivet specifications pulled directly from DWG 3.</p>
 
       <h2>What It Produced</h2>
 
       <p>After reading the manual, the drawings, and six builder websites, the AI created a <code>workshop/</code> folder with a build file for each sub-assembly. This folder is open source and available in the <a href="https://github.com/bibrakc/uran-khatola-factory/tree/main/workshop" target="_blank">project repository</a> so other builders can read it, use it as a template, or contribute. The drawing PNG files are excluded since those are converted from Van's Aircraft copyrighted plans, but all the build notes, warnings, and sequences are there.</p>
 
-<pre style="background:var(--bg-alt); border:1px solid var(--border); padding:12px; font-size:0.82rem; overflow-x:auto; margin:16px 0;">
+<pre style="background:var(--bg-alt); border:1px solid var(--border); padding:12px; font-size:0.82rem; overflow-x:auto; margin:16px 0; max-width:100%;">
 workshop/
   AGENT.md                   &lt;-- instructions for the AI
   empennage/
@@ -98,7 +98,7 @@ workshop/
 
       <p>Each file has the build sequence from the manual, the actual rivet callouts from the drawing, and a warnings section with every mistake I or another builder has made in that area. Here is what the rudder warnings section looks like:</p>
 
-      <img src="../../img/2026/building-with-an-ai-co-builder/rudder-warnings-in-vscode-preview.png" alt="Rudder build file showing Known Gotchas and Warnings section in VS Code">
+      <a href="../../img/2026/building-with-an-ai-co-builder/rudder-warnings-in-vscode-preview.png" target="_blank" class="img-link"><img src="../../img/2026/building-with-an-ai-co-builder/rudder-warnings-in-vscode-preview.png" alt="Rudder build file showing Known Gotchas and Warnings section in VS Code"></a>
       <p class="img-caption">The rudder.md file open in VS Code. The warnings section covers the thin R-801PP skin, the R-606PP plate orientation (a common mistake), back riveting technique, trailing edge bend, lead counterweight drilling, and strobe light clearance at the bottom tip. All of this came from the manual and from other builders' sites.</p>
 
       <h2>The AGENT.md File</h2>
