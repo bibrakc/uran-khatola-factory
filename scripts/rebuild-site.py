@@ -27,6 +27,7 @@ def collect_posts():
     date_re  = re.compile(r'<meta name="build-date" content="([^"]+)"', re.IGNORECASE)
     h1_re    = re.compile(r'<div class="post-header">\s*<h1>([^<]+)</h1>', re.DOTALL)
     hours_re = re.compile(r'<meta name="build-hours" content="([0-9.]+)"', re.IGNORECASE)
+    type_re  = re.compile(r'<meta name="post-type" content="([^"]+)"', re.IGNORECASE)
 
     for root, dirs, files in os.walk(os.path.join(WEBSITE_DIR, "posts")):
         for fname in files:
@@ -39,12 +40,14 @@ def collect_posts():
             if not (cat_m and date_m and h1_m):
                 continue
             hours_m = hours_re.search(content)
+            type_m  = type_re.search(content)
             posts.append({
-                "title":    h1_m.group(1).strip(),
-                "path":     rel_path,
-                "date":     date_m.group(1),
-                "category": cat_m.group(1),
-                "hours":    float(hours_m.group(1)) if hours_m else 0,
+                "title":     h1_m.group(1).strip(),
+                "path":      rel_path,
+                "date":      date_m.group(1),
+                "category":  cat_m.group(1),
+                "hours":     float(hours_m.group(1)) if hours_m else 0,
+                "post_type": type_m.group(1).strip().lower() if type_m else "build",
             })
     posts.sort(key=lambda p: p["date"], reverse=True)
     return posts
@@ -322,6 +325,43 @@ def update_index(table_html):
     open(INDEX_HTML, "w").write(new_content)
     print("index.html hours table updated.")
 
+def update_flying_log(posts):
+    """Regenerate the year-grouped post list in flying.html from posts with post_type=flying."""
+    flying = [p for p in posts if p.get("post_type") == "flying"]
+    if not flying:
+        return
+
+    # Group by year
+    years = {}
+    for p in flying:
+        y = p["date"][:4]
+        years.setdefault(y, []).append(p)
+
+    html = ""
+    for year in sorted(years.keys(), reverse=True):
+        html += f'\n    <h2 id="{year}">{year}</h2>\n    <ul class="post-list">\n'
+        for p in years[year]:
+            html += f'      <li>\n'
+            html += f'        <span class="post-date">{_fmt_date(p["date"])}</span>\n'
+            html += f'        <a href="{p["path"]}">{p["title"]}</a>\n'
+            html += f'        <span class="post-cat">{p["category"]}</span>\n'
+            html += f'      </li>\n'
+        html += '    </ul>\n'
+
+    flying_html = os.path.join(WEBSITE_DIR, "flying.html")
+    content = open(flying_html).read()
+    new_content = re.sub(
+        r'(<p[^>]*>Flying logs.*?</p>\s*).*?(?=\s*</main>)',
+        r'\1' + html,
+        content, flags=re.DOTALL
+    )
+    if new_content != content:
+        open(flying_html, "w").write(new_content)
+        print(f"flying.html updated ({len(flying)} flying posts).")
+    else:
+        print("flying.html: no changes needed.")
+
+
 if __name__ == "__main__":
     totals, buckets = collect_hours()
     if not totals:
@@ -336,16 +376,19 @@ if __name__ == "__main__":
         update_index(table_html)
 
     posts = collect_posts()
-    print(f"\nPosts found: {len(posts)}")
-    _, anchor_map = build_category_section(posts)
-    update_log(posts, anchor_map)
-    update_index_recent_posts(posts)
-    update_index_categories(posts, anchor_map)
-    update_recent_posts(posts)
-    update_post_nav(posts)
+    build_posts  = [p for p in posts if p.get("post_type") != "flying"]
+    print(f"\nPosts found: {len(posts)} ({len(build_posts)} build, {len(posts)-len(build_posts)} flying)")
+    _, anchor_map = build_category_section(build_posts)
+    update_log(build_posts, anchor_map)
+    update_index_recent_posts(posts)  # all posts including flying
+    update_index_categories(build_posts, anchor_map)
+    update_recent_posts(build_posts)
+    update_post_nav(build_posts)
+    update_flying_log(posts)
 
     # Add NEW! badge (GIF) to the most recent post in index.html and log.html
-    if posts:
+    if build_posts:
+        posts = build_posts
         newest_path = posts[0]["path"]
         badges = {
             INDEX_HTML: '<img src="img/common/new.gif" alt="NEW!" style="vertical-align:middle; height:1.2em; margin-right:4px;"> ',

@@ -2,7 +2,23 @@
 
 ## In Progress
 
-- [ ] Set up hosting (GitHub Pages recommended — free, simple, free SSL)
+- [ ] Improve the "Before 2026: Learning to Fly" flying post (draft exists, needs review)
+- [ ] Add remaining flying post images captions once confirmed
+
+## Up Next
+
+- [ ] Add a favicon animation or improve favicon
+- [ ] Add Open Graph meta tags for social sharing previews
+- [ ] Add `sitemap.xml`
+- [ ] Add `<meta name="description">` to flying.html
+
+## Flying Section (new)
+
+- [x] Created `flying.html` index page
+- [x] Created `posts/2026/flights-pre-2026.html` first flying post
+- [x] Added Flying nav item to all pages
+- [ ] Improve draft of flights-pre-2026.html (captions, content review)
+- [ ] Add more flying posts as they happen
 
 ## Up Next
 

@@ -22,7 +22,7 @@ Your job is to:
 **Goal:** Build, fly, and eventually fly the RV-8 back to Pakistan  
 **Experience:** Private pilot (PPL). Previously started an RV-7 empennage (sold it). Now starting fresh on RV-8.  
 **Priming:** Stewart Systems EkoPoxy (water-based, non-toxic) with EkoEtch surface prep. Non-toxic is a hard requirement — residential garage, closed space.  
-**EAA contacts:** Thomas (technical counselor), Mathew (building RV-9, [sunsetflyers.org](https://sunsetflyers.org/))
+**EAA contacts:** Thomas (technical counselor), Mathieu (building RV-9, [sunsetflyers.org](https://sunsetflyers.org/))
 
 ---
 
@@ -145,7 +145,7 @@ When Bibrak asks about a specific step or part:
 | [rv8-hangar.com](https://www.rv8-hangar.com/category/empennege-log-book/) | RV-8 | Michael's RV-8. 218 hrs on empennage. Good leading edge rolling technique. Completed and flying. |
 | [rv.squawk1200.net](https://rv.squawk1200.net) | RV-8 | Philip's RV-8. Started 2012, currently in firewall forward. Extremely detailed empennage section — ruined HS-410/HS-414 parts on first attempt (same area as Bibrak). Highly recommended. |
 | [7echocharlie.com](https://7echocharlie.com/empennage-completion/) | RV-14A | Eric's RV-14A. Empennage complete (58 hrs HS, 36 hrs rudder, 72 hrs elevators). RV-14 technique very similar to RV-8. Note: Bibrak commented on this site in 2021. Van's sent wrong stiffeners (two -R instead of -L) — check your inventory. |
-| [sunsetflyers.org](https://sunsetflyers.org/) | RV-9 | Mathew's RV-9 (EAA Chapter 20 member, Bibrak's chapter). Local contact. |
+| [sunsetflyers.org](https://sunsetflyers.org/) | RV-9 | Mathieu's RV-9 (EAA Chapter 20 member, Bibrak's chapter). Local contact. |
 | [vansairforce.net](https://www.vansairforce.net) | All RVs | Community forum. Search by part number for specific issues. Best for troubleshooting specific mistakes. |
 | [aerovintage.com/rv8](https://www.aerovintage.com/rv8/) | RV-8 | Completed RV-8. Good overview photos of empennage and fuselage. |
 | [mykitlog.com](http://www.mykitlog.com) | Various | Aggregator of many builder logs. Search for RV-8 builders. |

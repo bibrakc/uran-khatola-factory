@@ -16,6 +16,7 @@ Pure HTML + CSS. No framework, no build step, no JavaScript.
   style.css                # single stylesheet
   index.html               # home page
   log.html                 # build log (by year + by category)
+  flying.html              # flying log index
   about.html               # about the builder and project
   aircraft.html            # RV-8 aircraft page
   404.html                 # custom not found page
@@ -24,12 +25,12 @@ Pure HTML + CSS. No framework, no build step, no JavaScript.
   posts/
     2021/                  # one .html file per post, grouped by year
     2022/
-    2026/
+    2026/                  # build log posts + flying posts for 2026
   img/
     common/                # site-wide assets (banner, homepage photos, profile)
     2021/                  # per-post images, grouped by year/post-slug/
     2022/
-    2026/
+    2026/                  # build log posts + flying posts for 2026
   workshop/                # build planning notes (open source, drawings excluded)
     AGENT.md               # AI builder assist instructions
     empennage/
@@ -130,6 +131,16 @@ curl -sO "https://...full-url-no-query-params..."
 
 Fonts: **Courier New** (nav, meta, headers) + **Georgia** (body).  
 Responsive: two-column grid, sidebar stacks below at ≤680px. Images tap-to-zoom on mobile.
+
+## Flying Section
+
+Flying posts live in `posts/YEAR/` alongside build log posts, but are listed in `flying.html` (not `log.html`). They are **not** tracked by `rebuild-site.py`.
+
+To add a new flying post:
+1. Create `posts/YEAR/post-slug.html` using an existing flying post as template.
+2. Add images to `img/YEAR/post-slug/`.
+3. Add an entry to `flying.html` under the correct year heading manually.
+4. No need to run `rebuild-site.py`.
 
 ## Workshop (AI Builder Assist)
 
