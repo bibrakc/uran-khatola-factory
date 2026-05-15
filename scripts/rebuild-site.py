@@ -387,8 +387,7 @@ if __name__ == "__main__":
     update_flying_log(posts)
 
     # Add NEW! badge (GIF) to the most recent post in index.html and log.html
-    if build_posts:
-        posts = build_posts
+    if posts:
         newest_path = posts[0]["path"]
         badges = {
             INDEX_HTML: '<img src="img/common/new.gif" alt="NEW!" style="vertical-align:middle; height:1.2em; margin-right:4px;"> ',
