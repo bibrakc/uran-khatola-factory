@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://bibrakc.github.io/uran-khatola-factory/sitemap.xml
