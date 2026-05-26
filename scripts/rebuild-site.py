@@ -23,11 +23,11 @@ LOG_HTML     = os.path.join(WEBSITE_DIR, "log.html")
 
 def collect_posts():
     posts = []
-    cat_re   = re.compile(r'<meta name="build-category" content="([^"]+)"', re.IGNORECASE)
-    date_re  = re.compile(r'<meta name="build-date" content="([^"]+)"', re.IGNORECASE)
-    h1_re    = re.compile(r'<div class="post-header">\s*<h1>([^<]+)</h1>', re.DOTALL)
-    hours_re = re.compile(r'<meta name="build-hours" content="([0-9.]+)"', re.IGNORECASE)
-    type_re  = re.compile(r'<meta name="post-type" content="([^"]+)"', re.IGNORECASE)
+    cat_re    = re.compile(r'<meta name="build-category" content="([^"]+)"', re.IGNORECASE)
+    date_re   = re.compile(r'<meta name="build-date" content="([^"]+)"', re.IGNORECASE)
+    h1_re     = re.compile(r'<div class="post-header">\s*<h1>([^<]+)</h1>', re.DOTALL)
+    hours_re  = re.compile(r'<meta name="build-hours" content="([0-9.]+)"\s+data-category="([^"]+)"', re.IGNORECASE)
+    type_re   = re.compile(r'<meta name="post-type" content="([^"]+)"', re.IGNORECASE)
 
     for root, dirs, files in os.walk(os.path.join(WEBSITE_DIR, "posts")):
         for fname in files:
@@ -39,16 +39,37 @@ def collect_posts():
             cat_m, date_m, h1_m = cat_re.search(content), date_re.search(content), h1_re.search(content)
             if not (cat_m and date_m and h1_m):
                 continue
-            hours_m = hours_re.search(content)
-            type_m  = type_re.search(content)
-            posts.append({
-                "title":     h1_m.group(1).strip(),
-                "path":      rel_path,
-                "date":      date_m.group(1),
-                "category":  cat_m.group(1),
-                "hours":     float(hours_m.group(1)) if hours_m else 0,
-                "post_type": type_m.group(1).strip().lower() if type_m else "build",
-            })
+            type_m = type_re.search(content)
+            post_type = type_m.group(1).strip().lower() if type_m else "build"
+            title = h1_m.group(1).strip()
+            date  = date_m.group(1)
+
+            # Collect all category/hours pairs from build-hours meta tags
+            all_hours = hours_re.findall(content)  # list of (hours, category)
+            if all_hours:
+                categories = list(dict.fromkeys(c for _, c in all_hours))  # unique, ordered
+            else:
+                categories = [cat_m.group(1)]
+
+            # Primary category for display (first one, or build-category)
+            primary_cat = cat_m.group(1)
+
+            # Add one entry per category so post appears in each category section
+            seen = set()
+            for hrs_str, cat in (all_hours if all_hours else [("0", primary_cat)]):
+                if cat not in seen:
+                    seen.add(cat)
+                    posts.append({
+                        "title":      title,
+                        "path":       rel_path,
+                        "date":       date,
+                        "category":   cat,
+                        "hours":      float(hrs_str),
+                        "post_type":  post_type,
+                        "primary_cat": primary_cat,
+                        "all_cats":   categories,
+                    })
+
     posts.sort(key=lambda p: p["date"], reverse=True)
     return posts
 
