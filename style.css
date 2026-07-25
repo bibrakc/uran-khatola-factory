@@ -244,12 +244,12 @@ hr {
   margin: 16px auto;
 }
 
-.post-body .img-caption {
+.img-caption {
   text-align: center;
   font-size: 0.8rem;
   color: var(--text-muted);
   font-style: italic;
-  margin-top: -10px;
+  margin-top: 8px;
   margin-bottom: 16px;
 }
 
