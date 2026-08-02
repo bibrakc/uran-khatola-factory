@@ -127,11 +127,19 @@ def update_log(posts, anchor_map):
 
 def update_recent_posts(posts):
     """For each post, inject a sidebar showing the 2 before + 2 after it chronologically."""
-    for i, post in enumerate(posts):
+    # Deduplicate posts by path (multi-category posts appear multiple times)
+    seen = set()
+    unique_posts = []
+    for p in posts:
+        if p["path"] not in seen:
+            seen.add(p["path"])
+            unique_posts.append(p)
+
+    for i, post in enumerate(unique_posts):
         # window: up to 2 newer, self, up to 2 older (posts is newest-first)
         start = max(0, i - 2)
-        end   = min(len(posts), i + 3)
-        window = posts[start:end]
+        end   = min(len(unique_posts), i + 3)
+        window = unique_posts[start:end]
 
         abs_path = os.path.join(WEBSITE_DIR, post["path"])
         post_dir = os.path.dirname(abs_path)
@@ -152,18 +160,26 @@ def update_recent_posts(posts):
         if new != c:
             open(abs_path, "w").write(new)
 
-    print(f"Recent posts updated for {len(posts)} posts.")
+    print(f"Recent posts updated for {len(unique_posts)} posts.")
 
 
 def update_post_nav(posts):
     """Inject prev/next nav with dates into every post. posts is newest-first."""
+    # Deduplicate posts by path
+    seen = set()
+    unique_posts = []
+    for p in posts:
+        if p["path"] not in seen:
+            seen.add(p["path"])
+            unique_posts.append(p)
+
     def fmt_short(iso):
         from datetime import datetime
         return datetime.strptime(iso, "%Y-%m-%d").strftime("%b %-d, %Y")
 
-    for i, post in enumerate(posts):
-        newer = posts[i - 1] if i > 0 else None
-        older = posts[i + 1] if i < len(posts) - 1 else None
+    for i, post in enumerate(unique_posts):
+        newer = unique_posts[i - 1] if i > 0 else None
+        older = unique_posts[i + 1] if i < len(unique_posts) - 1 else None
 
         abs_path = os.path.join(WEBSITE_DIR, post["path"])
         post_dir = os.path.dirname(abs_path)
@@ -199,10 +215,10 @@ def update_index_recent_posts(posts):
         items += f'        <a href="{p["path"]}">{badge}{p["title"]}</a>\n'
         items += f'        <span class="post-cat">{p["category"]}</span>\n'
         items += "      </li>\n"
-    new_block = '<h2>Recent Build Log Entries</h2>\n    <ul class="post-list">\n' + items + "    </ul>"
+    new_block = '<h2>Recent Posts</h2>\n    <ul class="post-list">\n' + items + "    </ul>"
     c = open(INDEX_HTML).read()
     import re as _re
-    new = _re.sub(r'<h2>Recent Build Log Entries</h2>\s*<ul class="post-list">.*?</ul>',
+    new = _re.sub(r'<h2>Recent Posts</h2>\s*<ul class="post-list">.*?</ul>',
                  new_block, c, flags=_re.DOTALL)
     if new != c:
         open(INDEX_HTML, "w").write(new)
