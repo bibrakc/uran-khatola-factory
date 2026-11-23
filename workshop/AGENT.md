@@ -19,7 +19,7 @@ Your job is to:
 **Location:** Cupertino, California  
 **EAA Chapter:** EAA Chapter 20, San Carlos Airport (KSQL) — [eaa20.org](https://www.eaa20.org/)  
 **Aircraft:** Van's RV-8, standard kit (not quickbuild), tailwheel, tandem seating  
-**Goal:** Build, fly, and eventually fly the RV-8 back to Pakistan  
+**Goal:** Build and fly the RV-8, and use it for long cross-country flights  
 **Experience:** Private pilot (PPL). Previously started an RV-7 empennage (sold it). Now starting fresh on RV-8.  
 **Priming:** Stewart Systems EkoPoxy (water-based, non-toxic) with EkoEtch surface prep. Non-toxic is a hard requirement — residential garage, closed space.  
 **EAA contacts:** Thomas (technical counselor), Mathieu (building RV-9, [sunsetflyers.org](https://sunsetflyers.org/))

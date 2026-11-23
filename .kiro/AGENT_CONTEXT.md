@@ -1,31 +1,32 @@
-# Agent Context — Uran Khatola Factory Website
+# Agent Context: Uran Khatola Factory Website
 
-This file gives an AI agent everything it needs to work on this project without prior conversation history.
+This file gives an AI agent what it needs to work on this project without prior conversation history. Read it first. `README.md` has the same technical detail in a human-oriented form.
 
 ## Project Summary
 
-A static personal website for Bibrak Qamar Chandio, who is building a **Van's RV-8 homebuilt aircraft** in his garage in Cupertino, California. The site chronicles the build and flying adventures.
+A static personal website for Bibrak Qamar Chandio, who is building a **Van's RV-8 homebuilt aircraft** in his garage in Cupertino, California. The site covers the build and his flying.
 
 - **Live site:** https://bibrakc.github.io/uran-khatola-factory/
-- **Repo:** https://github.com/bibrakc/uran-khatola-factory
+- **Repo:** https://github.com/bibrakc/uran-khatola-factory (branch `main`, GitHub Pages from the root folder)
 - **Owner/author:** Bibrak Qamar Chandio (`bibrakc@gmail.com`)
 - **Social:** YouTube, Facebook, Instagram (all `urankhatolafactory`)
 
-## Deployment
+## Working Rules (from the owner, follow these)
 
-Hosted on **GitHub Pages** from the `main` branch, root folder.
-```bash
-python3 scripts/rebuild-site.py   # regenerate derived content
-git add .
-git commit -m "description"
-git push
-```
+1. **Do not push until the owner says so.** Commit only when asked. He often asks to amend the last commit and force-push (use `--force-with-lease`) or to squash into one commit, to avoid noisy history.
+2. **Commit messages describe the content added.** Do not mention style fixes such as em-dash removal.
+3. **No em dashes in prose.** Rephrase the sentence. A `&mdash;` in the footer and a `|` in titles are fine.
+4. **Plain, simple, minimal writing in the owner's voice.** No flowery or cringe language. Fix typos and commas, but do not add content he did not say. Ask for missing facts instead of inventing them.
+5. **Every content image needs a caption.**
+6. **Use "Mathieu"** (French spelling). Other names in use: Shujauddin Saqib Siddiqui (Oshkosh trip), Siddique (Houston ferry trip), Thomas (EAA 20 technical counselor), Carl, Mike (lead pilot, RV-6A), Paul (KSQL, Mooney M20C), Sergey (flight instructor).
+7. **Never mention sleep or hours of sleep** anywhere on the site.
+8. **Post date = the day the post is written**, formatted `YYYY-MM-DD` in the meta tag.
+9. **Leave `wings.html` alone.** It has gone missing from the working tree once with no known cause. If `git status` shows it deleted, restore it with `git checkout -- wings.html`.
+10. Do not use `pip --break-system-packages` or venvs. Use the system tools (`pdftotext`, `pdftoppm`, PIL).
 
 ## Tech Stack
 
-Pure HTML5 + CSS3. No JavaScript, no framework, no build tool.  
-Single stylesheet: `style.css` at repo root.  
-`scripts/rebuild-site.py` — run after every new build log post.
+Pure HTML5 + CSS3. No JavaScript, no framework, no build tool. One stylesheet: `style.css`. `scripts/rebuild-site.py` regenerates the derived parts of the site.
 
 ## Design System
 
@@ -41,132 +42,93 @@ Single stylesheet: `style.css` at repo root.
 | `--nav-bg` | `#1a4a2e` | Nav, footer, sidebar headers |
 | `--max-width` | `860px` | Content max width |
 
-**Fonts:** Courier New (nav, meta, headers) + Georgia (body).  
-**Responsive:** Two-column grid, sidebar stacks at ≤680px. Images tap-to-zoom (wrapped in `<a class="img-link">`).  
-**No em dashes** in prose. Rephrase sentences instead.
+Fonts: Courier New (nav, meta, headers) and Georgia (body). Two-column grid, sidebar stacks at 680px and below.
 
 ## File Map
 
 ```
-/                          # repo root = site root
+/                          repo root = site root
+  index.html               home (hours tables, recent posts, links)
+  log.html                 build log (By Year + By Category)
+  flying.html              flying post index
+  books.html               reading list (single page, 10 books)
+  about.html  aircraft.html  404.html
+  wings.html fuselage.html firewall-forward.html finishing.html avionics.html   placeholder pages
   style.css
-  index.html               # home
-  log.html                 # build log (by year + by category)
-  flying.html              # flying log index
-  about.html
-  aircraft.html
-  404.html
-  scripts/
-    rebuild-site.py
-  posts/
-    2021/                  # build log posts
-    2022/
-    2026/                  # build log posts + flying posts for 2026
-      flights-pre-2026.html   # flying post
-  img/
-    common/                # banner, homepage photos, profile
-    2021/post-slug/
-    2022/post-slug/
-    2026/post-slug/
-  workshop/                # AI builder assist notes (open source, drawings excluded)
-    AGENT.md
-    empennage/
+  sitemap.xml  robots.txt  googled5b43998e0486be9.html   SEO, Search Console verification
+  scripts/rebuild-site.py
+  posts/YEAR/post-slug.html
+  img/common/              site-wide assets (banner, new.gif, favicons, books/<book>/)
+  img/YEAR/post-slug/      per-post images; folder name equals the post filename
+  workshop/                AI builder assist notes (open source; empennage/drawings/ is gitignored, Van's copyright)
 ```
 
-## Navigation Structure
+Navigation on every page, in this order: `Home | Build Log | Aircraft | About | Flying`. Mark the current page with `class="active"`. Books is linked from the "Links" sidebar on `index.html`.
 
-All pages have this nav (in order):
-```
-Home | Build Log | Aircraft | About | Flying | YouTube | Facebook
-```
+Path depth: top-level pages use `style.css` and `img/...`. Posts in `posts/YEAR/` use `../../style.css` and `../../img/...`.
 
-- **Flying** links to `flying.html` (top-level pages) or `../../flying.html` (posts)
-- Mark the active page with `class="active"` on the relevant `<a>` tag
+## Two Kinds of Posts
 
-## Two Types of Posts
+Both live in `posts/YEAR/`. The easiest templates are `posts/2026/osh-2026.html` (flying) and `posts/2026/horizontal-and-vertical-stablizers-done.html` (build).
 
-### 1. Build Log Posts (go in `posts/YEAR/`)
-Tracked by `rebuild-site.py`. Require meta tags. Appear in `log.html` and `index.html`.
+**Build log post.** Listed in `log.html` and counted in the build hours table.
 
-Required meta tags:
+**Flying post.** Add `<meta name="post-type" content="flying">`. Listed in `flying.html`. It does not appear in `log.html`.
+
+Required `<head>` meta tags (both kinds):
 ```html
 <meta name="build-date"     content="YYYY-MM-DD">
-<meta name="build-category" content="Category Name">
+<meta name="build-category" content="Category Name">    <!-- plain &, e.g. "Research & Education" -->
 <meta name="build-hours"    content="X.X" data-category="category-key">
-<!-- add data-bucket="other" to exclude from build total -->
 ```
+- Flying posts use `data-category="social-flying" data-bucket="other"` and the category "Flying & Social". Their hours show under "Beyond the Build", not the build total.
+- A post can count hours in several categories with several `build-hours` tags, each with its own `data-category`. It then appears under each category.
+- The visible meta block shows date, category and hours (`&#9201; X hrs logged`). Keep it in sync with the tags.
+- Keep the empty `<div class="post-nav" id="post-nav"></div>` and `<div class="sidebar-section" id="recent-posts"></div>`. The script fills them.
+- The tag block uses `<div class="tags">` (not `post-tags`). The tags are decorative links to `#`, no page reads them. Use only a few meaningful tags.
 
-After adding: run `python3 scripts/rebuild-site.py` and add entry to `log.html` By Year section manually.
+## Adding a Post (checklist)
 
-### 2. Flying Posts (go in `posts/YEAR/`, listed in `flying.html`)
-NOT tracked by `rebuild-site.py`. Add entry to `flying.html` manually under the correct year heading.
+1. Copy a template, save as `posts/YEAR/slug.html`. Update `<title>`, `<h1>`, meta tags, description, body.
+2. Put images in `img/YEAR/slug/`. Resize like the existing ones: about 1536x2048 (or 2048x1536), roughly 500 KB to 1 MB each. Recompress anything larger (PIL, quality about 82) before adding it. The read tool fails on very large images.
+3. Wrap each image and add a caption:
+   ```html
+   <a href="../../img/YEAR/slug/photo.jpg" target="_blank" class="img-link">
+     <img src="../../img/YEAR/slug/photo.jpg" alt="description">
+   </a>
+   <p class="img-caption">Caption. Month Year.</p>
+   ```
+4. **Caption dates.** End the caption with the month and year, as in "Approaching San Carlos (KSQL) over the salt fields, October 2026." Leave captions that already carry a full date alone. Find dates in the photo EXIF (`DateTimeOriginal`). If a photo has no date, ask the owner. Do not guess.
+5. Place photos next to the part of the story they illustrate. Avoid dumping them at the end.
+6. Build log post only: add an entry to the By Year section of `log.html` by hand.
+7. Flying post: `rebuild-site.py` tries to update `flying.html`, but its regex often does not match. Check that the post is listed under the right year, newest first, and add it by hand if not.
+8. Add the new URL to `sitemap.xml`. It is maintained by hand and was missing several posts before.
+9. Run `python3 scripts/rebuild-site.py` from the repo root.
+10. Review `git status`, then wait for the owner before committing or pushing.
 
-Use `data-bucket="other"` on hours meta if logging flying time.
+## What rebuild-site.py Does
 
-## Image Conventions
+Scans all posts. Regenerates:
+1. Build Hours and "Beyond the Build" tables in `index.html`
+2. "Recent Posts" list in `index.html` (the heading must stay "Recent Posts"; includes flying posts)
+3. By Category section and sidebar in `log.html`, and the Categories sidebar in `index.html`
+4. "Around This Time" sidebar and prev/next nav on build posts
+5. NEW! badge (`img/common/new.gif`) on the newest post
+6. `flying.html` list (see step 7 above)
 
-- Images live in `img/YEAR/post-slug/` matching the post filename
-- All content images wrapped in `<a class="img-link">` for tap-to-zoom:
-```html
-<a href="../../img/YEAR/post-slug/photo.jpg" target="_blank" class="img-link">
-  <img src="../../img/YEAR/post-slug/photo.jpg" alt="description">
-</a>
-<p class="img-caption">Caption text.</p>
-```
-- Site-wide assets (banner, profile, gifs) in `img/common/`
+It does not touch `sitemap.xml` or the By Year list in `log.html`.
 
-## Path Depths
+## Photos and Privacy
 
-- Top-level pages: `style.css`, `img/common/...`, `flying.html`, `log.html`
-- Posts in `posts/YEAR/`: `../../style.css`, `../../img/...`, `../../flying.html`, `../../log.html`
+Many photos carry GPS EXIF data, and it is published as-is. The owner decided not to strip it. Do not strip GPS unless he asks. Note that recompressing with PIL drops EXIF, which is a side effect to be aware of.
 
-## Markers Managed by rebuild-site.py (do not edit manually in build log posts)
+## Videos
 
-```html
-<div class="post-nav" id="post-nav"></div>
-<div class="sidebar-section" id="recent-posts"></div>
-```
+YouTube Shorts and some videos show Error 153 on localhost. Use the full iframe embed code from YouTube including `?si=`. It works on the live site.
 
-## rebuild-site.py — What It Does
+## Hours and Posts
 
-Scans build log posts only (not flying posts). Regenerates:
-1. Build Hours + Beyond the Build tables in `index.html`
-2. Recent posts list in `index.html`
-3. By Category section + sidebar in `log.html`
-4. Categories sidebar in `index.html`
-5. "Around This Time" sidebar on every build log post
-6. Prev/Next nav on every build log post
-7. NEW! badge on most recent post
-
-## All Posts (newest first)
-
-| File | Date | Category | Type |
-|---|---|---|---|
-| posts/2026/flights-pre-2026.html | 2026-05-06 | Flying & Social | Flying |
-| posts/2026/building-with-an-ai-co-builder.html | 2026-05-04 | Research & Education | Build Log |
-| posts/2026/experimented-with-stewart-systems-primer.html | 2026-05-02 | Research & Education | Build Log |
-| posts/2026/attended-fiberglass-workshop.html | 2026-03-25 | Research & Education | Build Log |
-| posts/2026/back-to-building.html | 2026-02-19 | Planning | Build Log |
-| posts/2022/horizontal-stabilizer-update-2.html | 2022-03-19 | Empennage | Build Log |
-| posts/2021/horizontal-stabilizer-update-1.html | 2021-12-01 | Empennage | Build Log |
-| posts/2021/empennage-inventoried.html | 2021-10-27 | Empennage | Build Log |
-| posts/2021/finished-the-practice-flap-kit.html | 2021-10-20 | Research & Education | Build Log |
-| posts/2021/became-a-pilot-today.html | 2021-09-25 | Flying & Social | Build Log |
-| posts/2021/a-beauty-came-to-kbmg.html | 2021-08-30 | Flying & Social | Build Log |
-| posts/2021/marks-rv7.html | 2021-08-30 | Flying & Social | Build Log |
-| posts/2021/getting-to-know-tools.html | 2021-07-11 | Planning | Build Log |
-| posts/2021/update-on-empennage-crating-date.html | 2021-05-12 | Planning | Build Log |
-| posts/2021/homebuilthelp-rv7-rudder-workshop-dvd.html | 2021-05-11 | Planning | Build Log |
-| posts/2021/ordered-the-empennage-kit.html | 2021-04-26 | Planning | Build Log |
-
-## Current Build Hours
-
-| Category | Hours |
-|---|---|
-| Workshop | 4 |
-| Research & Education | 38 |
-| **Total** | **42** |
-| Flying & Social (beyond build) | 5.17 |
+Do not copy hour totals or post lists into docs, they go stale. The source of truth is the `build-*` meta tags in the posts, the tables in `index.html`, `log.html` and `flying.html`.
 
 ## External Links
 

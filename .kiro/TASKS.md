@@ -1,85 +1,47 @@
 # Tasks & Backlog
 
-## In Progress
-
-- [ ] Improve the "Before 2026: Learning to Fly" flying post (draft exists, needs review)
-- [ ] Add remaining flying post images captions once confirmed
-
 ## Up Next
 
-- [ ] Add a favicon animation or improve favicon
-- [ ] Add Open Graph meta tags for social sharing previews
-- [ ] Add `sitemap.xml`
-- [ ] Add `<meta name="description">` to flying.html
-
-## Flying Section (new)
-
-- [x] Created `flying.html` index page
-- [x] Created `posts/2026/flights-pre-2026.html` first flying post
-- [x] Added Flying nav item to all pages
-- [ ] Improve draft of flights-pre-2026.html (captions, content review)
-- [ ] Add more flying posts as they happen
-
-## Up Next
-
-- [ ] Add a favicon (small airplane icon or "UKF" initials)
-- [ ] Create a `404.html` page
-- [ ] Add Open Graph meta tags (`og:title`, `og:description`, `og:image`) to each page for social sharing previews
-- [ ] Add `<meta name="description">` to each page for SEO
-- [ ] Add a `sitemap.xml`
-
-## Deployment
-
-- [x] Hosted on GitHub Pages: https://bibrakc.github.io/uran-khatola-factory/
-- [x] Repo: https://github.com/bibrakc/uran-khatola-factory
-- [x] SSH key auth configured for push
-- [ ] Set up custom domain (optional)
-- [ ] Document full publish workflow: write post → run rebuild-site.py → git add/commit/push
+- [ ] Make `rebuild-site.py` regenerate `sitemap.xml` from the post files (it is maintained by hand and has fallen behind before)
+- [ ] Fix the `flying.html` regex in `rebuild-site.py` so new flying posts are added automatically
+- [ ] Add a missing-caption pass: a few photos in `flights-pre-2026.html` have no caption (second sunset photo, two Mount Hood photos, second Fueling photo, second checkride photo)
+- [ ] Confirm dates for photos left without a month and year in `flights-pre-2026.html`: Taylorcraft, "Autumn over Indiana", KBMG to KLWV solo cross-country, "Fueling the C172"
+- [ ] Add a favicon animation or improve the favicon
+- [ ] Add `<meta name="description">` to `flying.html`
+- [ ] Fill in the placeholder pages (`wings.html`, `fuselage.html`, `firewall-forward.html`, `finishing.html`, `avionics.html`) as the build reaches them
 
 ## Content Backlog
 
-- [ ] Add "Build Stats" sidebar section to index.html homepage. Manually maintained. Suggested stats: kit sections ordered/received, parts reordered, rivets driven, workshops attended, tools acquired, manuals read. Honest and fun — shows the real side of building. Style like the hours table (Courier New, monospace).
-- [ ] Write and add new RV-8 build posts as work progresses
-- [ ] Add a "Lessons Learned" page (inspired by papalimabravo.com)
-- [ ] Add a "Tools & Equipment" page
-- [ ] Add a "Links" page (other builder sites, EAA resources)
-- [ ] Embed YouTube videos in relevant posts once published
-- [ ] Add profile photo alt text and caption on about.html
+- [ ] "Build Stats" sidebar on `index.html` (kit sections received, parts reordered, rivets driven, workshops attended, tools acquired). Manually maintained, Courier New, styled like the hours table
+- [ ] More RV-8 build posts as work progresses
+- [ ] More flying posts (Mooney search, cross-country trips)
+- [ ] "Lessons Learned" page (inspired by papalimabravo.com)
+- [ ] "Tools & Equipment" page
+- [ ] "Links" page (other builder sites, EAA resources)
+- [ ] Profile photo alt text and caption on `about.html`
 
 ## Design / UX Backlog
 
-- [ ] Replace CSS "NEW!" badge with a real animated new.gif (90s style). Download manually from gifcities.org or similar, save as `img/common/new.gif`, then update `rebuild-site.py` to use `<img src="...new.gif">` instead of the `<span class="badge-new">` tag.
-- [ ] Review and possibly tweak color scheme (currently: white bg, dark green nav, red accent)
-- [ ] Add print stylesheet so posts print cleanly
-- [ ] Consider a small airplane ASCII art or SVG in the header for extra vintage feel
+- [ ] Print stylesheet so posts print cleanly
 - [ ] Review mobile layout on real devices (iPhone, Android, iPad)
+- [ ] Tag pages (tags are decorative links to `#` today, nothing reads them). Only worth it with many posts per topic
 
 ## Technical Backlog
 
-- [ ] `rebuild-site.py`: only rewrite files that actually changed (optimization — low priority)
-- [ ] `rebuild-site.py`: also regenerate the "Recent Posts" list on `index.html` (top 5 newest)
-- [ ] `rebuild-site.py`: add a `--dry-run` flag to preview changes without writing
-- [ ] Validate all HTML with W3C validator
-- [ ] Add `alt` text audit — ensure all `<img>` tags have meaningful alt text
+- [ ] `rebuild-site.py`: only rewrite files that changed
+- [ ] `rebuild-site.py`: `--dry-run` flag
+- [ ] Validate all HTML with the W3C validator
+- [ ] Audit `alt` text on all `<img>` tags
+- [ ] Optional: custom domain
 
-## Completed
+## Completed (summary)
 
-- [x] Design and implement vintage aesthetic (CSS) — white/green/red palette
-- [x] Build home page (index.html)
-- [x] Build log page (log.html) — by year + by category views
-- [x] Build about page (about.html)
-- [x] Import all 13 WordPress posts as static HTML with original timestamps
-- [x] Responsive layout (mobile/tablet/desktop, sidebar stacks at ≤680px)
-- [x] Download all media from WordPress into img/YEAR/post-slug/ folders
-- [x] Replace all image placeholders with real photos
-- [x] Build hours system: meta tags in posts → auto-updates index.html table
-- [x] "Beyond the Build" section for non-build hours (social-flying category)
-- [x] rebuild-site.py: auto-generates By Category section in log.html
-- [x] rebuild-site.py: auto-generates Categories sidebar in index.html + log.html
-- [x] rebuild-site.py: auto-generates "Around This Time" sidebar on every post
-- [x] rebuild-site.py: auto-generates prev/next nav with dates on every post
-- [x] Organized posts/ and img/ by year/post-slug hierarchy
-- [x] Banner image (site logo) on all pages
-- [x] Fixed all category labels (removed "Uncategorized")
-- [x] Links sidebar only on homepage
-- [x] Build Hours table only on homepage
+- Vintage static site: home, build log (By Year and By Category), about, aircraft, books, 404, favicon
+- All WordPress posts imported with original dates and media, organized as `posts/YEAR/` and `img/YEAR/post-slug/`
+- Hours system driven by post meta tags, including multi-category posts and the "Beyond the Build" bucket
+- `rebuild-site.py`: hours tables, recent posts, categories, Around This Time, prev/next, NEW! badge
+- Flying section (`flying.html`) with posts: Before 2026, Oshkosh AirVenture 2026, Complex Endorsement
+- SEO: sitemap, robots.txt, Open Graph tags, canonical URLs, Google Search Console verification
+- Workshop folder (AI builder assist) and the "Building with an AI Co-Builder" post
+- Month and year added to flying post photo captions
+- Hosted on GitHub Pages with SSH push

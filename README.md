@@ -19,7 +19,10 @@ Pure HTML + CSS. No framework, no build step, no JavaScript.
   flying.html              # flying log index
   about.html               # about the builder and project
   aircraft.html            # RV-8 aircraft page
+  books.html               # reading list
   404.html                 # custom not found page
+  sitemap.xml              # hand-maintained list of pages for search engines
+  robots.txt
   scripts/
     rebuild-site.py        # regenerates derived content (run after every new post)
   posts/
@@ -52,7 +55,7 @@ python3 -m http.server 8080
 
 ## Adding a New Post
 
-1. Copy any existing post as a template (e.g. `posts/2026/attended-fiberglass-workshop.html`).
+1. Copy an existing post as a template (e.g. `posts/2026/horizontal-and-vertical-stablizers-done.html` for build, `posts/2026/osh-2026.html` for flying).
 2. Save as `posts/YEAR/post-slug.html`.
 3. Update: `<title>`, `<h1>` inside `.post-header`, and body content.
 4. Set the required meta tags in `<head>`:
@@ -65,7 +68,8 @@ python3 -m http.server 8080
 5. Download post images into `img/YEAR/post-slug/` (see Media section below).
 6. Add `<img>` tags in the post body wrapped in `<a class="img-link">` for tap-to-zoom.
 7. Add the post entry to the By Year section of `log.html` manually.
-8. Run `python3 scripts/rebuild-site.py` from the repo root.
+8. Add the URL to `sitemap.xml` by hand.
+9. Run `python3 scripts/rebuild-site.py` from the repo root.
 
 The script handles:
 - Build hours table on `index.html`
@@ -75,6 +79,9 @@ The script handles:
 - "Around This Time" sidebar on every post
 - Prev/next navigation on every post
 - NEW! badge on the most recent post
+- Year-grouped list in `flying.html` (its regex often does not match, so check it)
+
+A post can count hours in several categories by using several `build-hours` meta tags, each with its own `data-category`.
 
 ## Hours Categories
 
@@ -99,8 +106,10 @@ All post images are wrapped in `<a class="img-link">` so tapping opens the full-
 <a href="../../img/YEAR/post-slug/photo.jpg" target="_blank" class="img-link">
   <img src="../../img/YEAR/post-slug/photo.jpg" alt="description">
 </a>
-<p class="img-caption">Caption text.</p>
+<p class="img-caption">Caption text, Month Year.</p>
 ```
+
+Captions end with the month and year the photo was taken (read it from the photo EXIF). Captions that already have a full date are left as they are. Resize photos to about 1536x2048 and under roughly 1 MB before adding them.
 
 ## Media Workflow (importing from WordPress)
 
@@ -134,13 +143,13 @@ Responsive: two-column grid, sidebar stacks below at ≤680px. Images tap-to-zoo
 
 ## Flying Section
 
-Flying posts live in `posts/YEAR/` alongside build log posts, but are listed in `flying.html` (not `log.html`). They are **not** tracked by `rebuild-site.py`.
+Flying posts live in `posts/YEAR/` next to build log posts and carry `<meta name="post-type" content="flying">`. They are listed in `flying.html` (not `log.html`) with `data-category="social-flying" data-bucket="other"` on the hours tag. `rebuild-site.py` counts their hours under "Beyond the Build", lists them in Recent Posts, and tries to regenerate `flying.html`.
 
-To add a new flying post:
-1. Create `posts/YEAR/post-slug.html` using an existing flying post as template.
-2. Add images to `img/YEAR/post-slug/`.
-3. Add an entry to `flying.html` under the correct year heading manually.
-4. No need to run `rebuild-site.py`.
+To add a flying post:
+1. Create `posts/YEAR/post-slug.html` from `posts/2026/osh-2026.html`.
+2. Add images to `img/YEAR/post-slug/` (same name as the post file).
+3. Run `python3 scripts/rebuild-site.py`, then check `flying.html` and add the entry by hand if it is missing.
+4. Add the URL to `sitemap.xml`.
 
 ## Workshop (AI Builder Assist)
 
@@ -152,7 +161,9 @@ The drawing PNG files (`workshop/empennage/drawings/`) are excluded from git as 
 
 ```bash
 python3 scripts/rebuild-site.py
-git add .
-git commit -m "description"
+git add <files>
+git commit -m "description of the content added"
 git push
 ```
+
+Do not push until the owner asks. See `.kiro/AGENT_CONTEXT.md` for the working rules (no em dashes, plain voice, captions on every image).
